@@ -8,7 +8,7 @@
 #ifndef SOURCE_DSF_UART_OCP_H_
 #define SOURCE_DSF_UART_OCP_H_
 
-#include "t_OCP.h";
+#include "OCP.h"
 
 class dsf_UART_OCP : public OCP
 {
@@ -30,6 +30,8 @@ public:
 	void ResetPeripheral();
 	void WaitComm(t_Comm comm);
 	void SetExceptionHandle(t_Except e);
+private:
+	//parameters
 }; // end class dsf_UART_OCP
 
 #endif /* SOURCE_DSF_UART_OCP_H_ */

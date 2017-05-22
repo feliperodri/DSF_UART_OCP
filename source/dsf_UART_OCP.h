@@ -10,7 +10,7 @@
 
 #include "t_OCP.h";
 
-class dsf_UART_OCP : public t_OCP
+class dsf_UART_OCP : public OCP
 {
 public:
 	dsf_UART_OCP();

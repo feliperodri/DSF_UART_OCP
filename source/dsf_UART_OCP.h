@@ -16,11 +16,11 @@ public:
 	dsf_UART_OCP();
 	virtual ~dsf_UART_OCP();
 	virtual void BindPeripheral(t_OCP ocp) const;
-	virtual void BindPin(int pin) const;
+	//virtual void BindPin(int pin) const;
 	virtual void Initialize() const;
 	void SetAddrSlave(t_Byte addr);
 	void SetFrame(t_Byte LenData, t_parity Parity, t_stop stop);
-	void SetBaudRate(int rate);
+	void SetBaudRate(uint32_t rate);
 	void SendData(t_Byte data);
 	int ReceiveData();
 	void SendDataTo(t_Byte data, int addr);
@@ -31,7 +31,9 @@ public:
 	void WaitComm(t_Comm comm);
 	void SetExceptionHandle(t_Except e);
 private:
-	//parameters
+	t_OCP ocp;
+	uint16_t baudRateModuloDivisor;
+	uint32_t boudRate;
 }; // end class dsf_UART_OCP
 
 #endif /* SOURCE_DSF_UART_OCP_H_ */

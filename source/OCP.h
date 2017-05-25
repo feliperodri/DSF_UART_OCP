@@ -12,7 +12,7 @@ class OCP
 {
 public:
 	virtual void BindPeripheral(t_OCP ocp) const = 0;
-	virtual void BindPin(int pin) const = 0;
+	//virtual void BindPin(int pin) const = 0;
 	virtual void Initialize() const = 0;
 }; //end class OCP
 

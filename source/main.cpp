@@ -18,19 +18,18 @@ volatile void rot_exc(t_Except e){
 
 void setup(){
 	uart.BindPheripheral(dsf_UART0);
-	uart.BindPin(16);
-	uart.SetAddrSlave(1);
-	uart.SetFrame(7, dsf_odd, dsf_two);
+	//uart.BindPin(16);
+	//uart.SetAddrSlave(1);
+	//uart.SetFrame(7, dsf_odd, dsf_two);
 	uart.SetBaudRate(9600);
-	uart.SetExceptionHandle(rot_exc);
+	//uart.SetExceptionHandle(rot_exc);
 	uart.Initialize();
 }
 
 int main(void) {
 	/* Init board hardware. */
-	BOARD_InitPins();
-	BOARD_BootClockRUN();
-	BOARD_InitDebugConsole();
+	//BOARD_InitPins();
+	//BOARD_BootClockRUN();
 
 	setup();
 	// Transmissão de dados

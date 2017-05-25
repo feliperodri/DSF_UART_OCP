@@ -33,10 +33,10 @@ typedef enum {dsf_Odd, dsf_Even } t_Parity;
 
 typedef enum {ok=0, dsf_OverWrite, dsf_ParityError} t_Exception;
 
-typedef unsigned char t_Byte;
+typedef uint8_t t_Byte;
 
-typedef unsigned short int t_Word;
+typedef uint16_t t_Word;
 
-typedef unsigned long int t_Dwword;
+typedef uint32_t t_Dwword;
 
 #endif /* SOURCE_UTILS_H_ */

@@ -4,25 +4,25 @@
  *  Created on: May 21, 2017
  *      Author: Felipe R. Monteiro
  */
-//#include <stdint.h>
+
 #include "dsf_UART_OCP.h"
-#include "MK64F12.h"
+#include "../../PiscaLedSemSuportes/Includes/MK64F12.h"
 using namespace std;
 
 #define DEMO_UART_CLK_FREQ CLOCK_GetFreq(UART0_CLK_SRC)
 
 dsf_UART_OCP::dsf_UART_OCP()
 {
-
+	//TODO
 } // end dsf_UART_OCP constructor
 
 dsf_UART_OCP::~dsf_UART_OCP()
 
 {
-
+	//TODO
 } // end dsf_UART_OCP destructor
 
-void dsf_UART_OCP::BindPeripheral(OCP ocp) const
+void dsf_UART_OCP::BindPeripheral(t_OCP ocp)
 {
 	if(ocp == dsf_UART0 || ocp == dsf_UART1 || ocp == dsf_UART2 )
 	{
@@ -41,7 +41,7 @@ void dsf_UART_OCP::BindPin(int pin) const
 } // end function BindPin
  */
 
-void dsf_UART_OCP::Initialize() const
+void dsf_UART_OCP::Initialize()
 {
 	if(this->ocp == dsf_UART0)
 	{
@@ -52,9 +52,8 @@ void dsf_UART_OCP::Initialize() const
 		UART0_C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK ); /*Disable Tx and Rx*/
 		UART0_C1 = 0; /*Default settings of the register*/
 		this->baudRateModuloDivisor = (t_Word)((21000*1000)/(this->boudRate * 16)); /* Calculate baud settings */
-		temp = UART0_BDH & ~(UART_BDH_SBR(0x1F));/*Save the value of UART0_BDH except SBR*/
-		UART0_BDH = temp | (((ubd & 0x1F00) >> 8));
-		UART0_BDL = (t_Byte)(ubd & UART_BDL_SBR_MASK);
+		UART0_BDH = (UART0_BDH & ~(UART_BDH_SBR(0x1F))) | (((this->baudRateModuloDivisor & 0x1F00) >> 8));
+		UART0_BDL = (t_Byte)(this->baudRateModuloDivisor & UART_BDL_SBR_MASK);
 		UART0_C2 |=(UART_C2_TE_MASK |UART_C2_RE_MASK); /* Enable receiver and transmitter*/
 #if 0
 		CLOCK_EnableClock(kCLOCK_PortB); /* Port B Clock Gate Control: Clock enabled */
@@ -86,7 +85,7 @@ void dsf_UART_OCP::SetAddrSlave(t_Byte addr)
 
 } // end function SetAddrSlave
 
-void dsf_UART_OCP::SetFrame(t_Byte LenData, t_parity Parity, t_stop stop)
+void dsf_UART_OCP::SetFrame(t_Byte LenData, t_Parity parity, t_Stop stop)
 {
 
 } // end function SetFrame
@@ -145,7 +144,7 @@ void dsf_UART_OCP::WaitComm(t_Comm comm)
 	}
 } // end function WaitComm
 
-void dsf_UART_OCP::SetExceptionHandle(t_Except e)
+void dsf_UART_OCP::SetExceptionHandle(t_Exception e)
 {
 
 } // end function SetExceptionHandle

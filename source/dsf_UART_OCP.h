@@ -10,26 +10,28 @@
 
 #include "OCP.h"
 
-class dsf_UART_OCP : public OCP
+class dsf_UART_OCP //: public OCP
 {
 public:
 	dsf_UART_OCP();
-	virtual ~dsf_UART_OCP();
-	virtual void BindPeripheral(t_OCP ocp) const;
+	~dsf_UART_OCP();
+	//virtual void BindPeripheral(t_OCP ocp);
+	void BindPeripheral(t_OCP ocp);
 	//virtual void BindPin(int pin) const;
-	virtual void Initialize() const;
+	//virtual void Initialize();
+	void Initialize();
 	void SetAddrSlave(t_Byte addr);
-	void SetFrame(t_Byte LenData, t_parity Parity, t_stop stop);
+	void SetFrame(t_Byte LenData, t_Parity parity, t_Stop stop);
 	void SetBaudRate(t_Dwword rate);
 	void SendData(t_Byte data);
-	int ReceiveData();
+	t_Byte ReceiveData();
 	void SendDataTo(t_Byte data, int addr);
 	t_Byte ReceiveDataAny(int *addr);
 	void ClearPeripheral();
 	void CancelSend();
 	void ResetPeripheral();
 	void WaitComm(t_Comm comm);
-	void SetExceptionHandle(t_Except e);
+	void SetExceptionHandle(t_Exception e);
 private:
 	t_OCP ocp;
 	t_Word baudRateModuloDivisor;

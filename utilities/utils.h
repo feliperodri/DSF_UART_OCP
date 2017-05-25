@@ -8,6 +8,7 @@
 #ifndef SOURCE_UTILS_H_
 #define SOURCE_UTILS_H_
 
+#include<stdint.h>
 
 typedef enum {dsf_GPIOA, dsf_GPIOB, dsf_GPIOC, dsf_GPIOD, dsf_GPIOE, dsf_TPM0,
 			  dsf_TPM1, dsf_TPM2, dsf_CMP, dsf_PIT, dsf_DAC, dsf_ADC, dsf_I2C0,

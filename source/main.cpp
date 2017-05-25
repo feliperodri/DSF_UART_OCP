@@ -5,19 +5,20 @@
 //#include "board.h"
 //#include "pin_mux.h"
 //#include "clock_config.h"
-#include"dsf_UART_OCP.h"
+
+#include "dsf_UART_OCP.h"
 /*!
  * @brief Application entry point.
  */
 t_Byte dado;
 dsf_UART_OCP uart;
 
-volatile void rot_exc(t_Except e){
+void rot_exc(t_Exception e){
 	//handle "e" exception
 }
 
 void setup(){
-	uart.BindPheripheral(dsf_UART0);
+	uart.BindPeripheral(dsf_UART0);
 	uart.SetBaudRate(9600);
 	//uart.SetExceptionHandle(rot_exc);
 	uart.Initialize();
@@ -42,8 +43,9 @@ int main(void)
 	put("\r\nSerial code example\r\n");
 
 	//while(1) {
-		dado = uart.ReceiveData();
-		uart.SendData(dado);
-		//BLUE_TOGGLE;
+	dado = uart.ReceiveData();
+	uart.SendData(dado);
+	//BLUE_TOGGLE;
 	//}
+	return 0;
 }

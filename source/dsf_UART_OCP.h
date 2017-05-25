@@ -20,7 +20,7 @@ public:
 	virtual void Initialize() const;
 	void SetAddrSlave(t_Byte addr);
 	void SetFrame(t_Byte LenData, t_parity Parity, t_stop stop);
-	void SetBaudRate(uint32_t rate);
+	void SetBaudRate(t_Dwword rate);
 	void SendData(t_Byte data);
 	int ReceiveData();
 	void SendDataTo(t_Byte data, int addr);
@@ -32,8 +32,8 @@ public:
 	void SetExceptionHandle(t_Except e);
 private:
 	t_OCP ocp;
-	uint16_t baudRateModuloDivisor;
-	uint32_t boudRate;
+	t_Word baudRateModuloDivisor;
+	t_Dwword boudRate;
 }; // end class dsf_UART_OCP
 
 #endif /* SOURCE_DSF_UART_OCP_H_ */

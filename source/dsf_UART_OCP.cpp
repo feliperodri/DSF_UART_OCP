@@ -6,6 +6,7 @@
  */
 //#include <stdint.h>
 #include "dsf_UART_OCP.h"
+#include "MK64F12.h"
 using namespace std;
 
 #define DEMO_UART_CLK_FREQ CLOCK_GetFreq(UART0_CLK_SRC)
@@ -44,6 +45,18 @@ void dsf_UART_OCP::Initialize() const
 {
 	if(this->ocp == dsf_UART0)
 	{
+		SIM_SCGC4 |= SIM_SCGC4_UART0_MASK; /*Enable the UART clock*/
+		SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK; /*Enable the PORTB clock*/
+		PORTB_PCR16 |= PORT_PCR_MUX(3);
+		PORTB_PCR17 |= PORT_PCR_MUX(3);
+		UART0_C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK ); /*Disable Tx and Rx*/
+		UART0_C1 = 0; /*Default settings of the register*/
+		this->baudRateModuloDivisor = (t_Word)((21000*1000)/(this->boudRate * 16)); /* Calculate baud settings */
+		temp = UART0_BDH & ~(UART_BDH_SBR(0x1F));/*Save the value of UART0_BDH except SBR*/
+		UART0_BDH = temp | (((ubd & 0x1F00) >> 8));
+		UART0_BDL = (t_Byte)(ubd & UART_BDL_SBR_MASK);
+		UART0_C2 |=(UART_C2_TE_MASK |UART_C2_RE_MASK); /* Enable receiver and transmitter*/
+#if 0
 		CLOCK_EnableClock(kCLOCK_PortB); /* Port B Clock Gate Control: Clock enabled */
 		PORT_SetPinMux(PORTB, PIN16_IDX, kPORT_MuxAlt3); /* PORTB16 (pin 62) is configured as UART0_RX */
 		PORT_SetPinMux(PORTB, PIN17_IDX, kPORT_MuxAlt3); /* PORTB17 (pin 63) is configured as UART0_TX */
@@ -52,11 +65,11 @@ void dsf_UART_OCP::Initialize() const
 				| SIM_SOPT5_UART0TXSRC(SOPT5_UART0TXSRC_UART_TX) /* UART 0 transmit data source select: UART0_TX pin */
 		);
 
-	    BOARD_BootClockRUN();
+		BOARD_BootClockRUN();
 
-	    /* Calculate the baud rate modulo divisor */
-	   this->baudRateModuloDivisor = DEMO_UART_CLK_FREQ / (this->boudRate * 16);
-
+		/* Calculate the baud rate modulo divisor */
+		this->baudRateModuloDivisor = DEMO_UART_CLK_FREQ / (this->boudRate * 16);
+#endif
 	}
 	else if (this->ocp == dsf_UART1)
 	{
@@ -78,19 +91,21 @@ void dsf_UART_OCP::SetFrame(t_Byte LenData, t_parity Parity, t_stop stop)
 
 } // end function SetFrame
 
-void dsf_UART_OCP::SetBaudRate(uint32_t rate)
+void dsf_UART_OCP::SetBaudRate(t_Dwword rate)
 {
 	this->boudRate = rate;
 } // end function SetBaudRate
 
 void dsf_UART_OCP::SendData(t_Byte data)
 {
-
+	this->WaitComm(dsf_Tx);
+	UART0_D = (t_Byte)data; /* Send the character */
 } // end function SendData
 
-int dsf_UART_OCP::ReceiveData()
+t_Byte dsf_UART_OCP::ReceiveData()
 {
-
+	this->WaitComm(dsf_Rx);
+	return UART0_D; /* Return the 8-bit data from the receiver */
 } // end function ReceiveData
 
 void dsf_UART_OCP::SendDataTo(t_Byte data, int addr)
@@ -120,7 +135,14 @@ void dsf_UART_OCP::ResetPeripheral()
 
 void dsf_UART_OCP::WaitComm(t_Comm comm)
 {
-
+	if(comm == dsf_Tx)
+	{
+		while(!(UART0_S1 & UART_S1_TDRE_MASK)); /* Wait until space is available in the FIFO */
+	}
+	else
+	{
+		while (!(UART0_S1 & UART_S1_RDRF_MASK)); /* Wait until character has been received */
+	}
 } // end function WaitComm
 
 void dsf_UART_OCP::SetExceptionHandle(t_Except e)

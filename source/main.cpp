@@ -2,10 +2,10 @@
  * This is template for main module created by New Kinetis SDK 2.x Project Wizard. Enjoy!
  **/
 
-#include "board.h"
-#include "pin_mux.h"
-#include "clock_config.h"
-
+//#include "board.h"
+//#include "pin_mux.h"
+//#include "clock_config.h"
+#include"dsf_UART_OCP.h"
 /*!
  * @brief Application entry point.
  */
@@ -18,28 +18,32 @@ volatile void rot_exc(t_Except e){
 
 void setup(){
 	uart.BindPheripheral(dsf_UART0);
-	//uart.BindPin(16);
-	//uart.SetAddrSlave(1);
-	//uart.SetFrame(7, dsf_odd, dsf_two);
 	uart.SetBaudRate(9600);
 	//uart.SetExceptionHandle(rot_exc);
 	uart.Initialize();
 }
 
-int main(void) {
-	/* Init board hardware. */
-	//BOARD_InitPins();
-	//BOARD_BootClockRUN();
+void put(char *ptr_str)
+{
+	while(*ptr_str)
+		uart.SendData(*ptr_str++);
+}
 
+int main(void)
+{
 	setup();
 	// Transmissão de dados
-	uart.SendData(dado);
-	uart.WaitComm(dsf_Tx);
+	//uart.SendData(dado);
+	//uart.WaitComm(dsf_Tx);
 	// Recepção de dados
-	uart.WaitComm (dsf_Rx);
-	dado = uart.ReceiveData();
+	//uart.WaitComm (dsf_Rx);
+	//dado = uart.ReceiveData();
 
-	for(;;) { /* Infinite loop to avoid leaving the main function */
-		__asm("NOP"); /* something to use as a breakpoint stop while looping */
-	}
+	put("\r\nSerial code example\r\n");
+
+	//while(1) {
+		dado = uart.ReceiveData();
+		uart.SendData(dado);
+		//BLUE_TOGGLE;
+	//}
 }

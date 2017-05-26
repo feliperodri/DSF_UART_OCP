@@ -10,16 +10,13 @@
 
 #include "OCP.h"
 
-class dsf_UART_OCP //: public OCP
+class dsf_UART_OCP : public OCP
 {
 public:
 	dsf_UART_OCP();
 	~dsf_UART_OCP();
-	//virtual void BindPeripheral(t_OCP ocp);
-	void BindPeripheral(t_OCP ocp);
-	//virtual void BindPin(int pin) const;
-	//virtual void Initialize();
-	void Initialize();
+	void BindPeripheral(t_OCP ocp) override;
+	void Initialize() override;
 	void SetAddrSlave(t_Byte addr);
 	void SetFrame(t_Byte LenData, t_Parity parity, t_Stop stop);
 	void SetBaudRate(t_Dwword rate);

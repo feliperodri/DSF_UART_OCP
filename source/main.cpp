@@ -1,15 +1,5 @@
-/**
- * This is template for main module created by New Kinetis SDK 2.x Project Wizard. Enjoy!
- **/
-
-//#include "board.h"
-//#include "pin_mux.h"
-//#include "clock_config.h"
-
 #include "dsf_UART_OCP.h"
-/*!
- * @brief Application entry point.
- */
+
 t_Byte dado;
 dsf_UART_OCP uart;
 
@@ -33,14 +23,8 @@ void put(char *ptr_str)
 int main(void)
 {
 	setup();
-	// Transmissão de dados
-	//uart.SendData(dado);
-	//uart.WaitComm(dsf_Tx);
-	// Recepção de dados
-	//uart.WaitComm (dsf_Rx);
-	//dado = uart.ReceiveData();
 
-	put("\r\nSerial code example\r\n");
+	put("\r\nExample\r\n");
 
 	//while(1) {
 	dado = uart.ReceiveData();

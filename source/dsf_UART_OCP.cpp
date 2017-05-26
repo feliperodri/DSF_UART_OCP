@@ -114,7 +114,7 @@ void dsf_UART_OCP::SendDataTo(t_Byte data, int addr)
 
 t_Byte dsf_UART_OCP::ReceiveDataAny(int *addr)
 {
-
+	return 0;
 } // end function ReceiveDataAny
 
 void dsf_UART_OCP::ClearPeripheral()

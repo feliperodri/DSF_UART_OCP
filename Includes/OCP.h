@@ -8,12 +8,12 @@
 #ifndef SOURCE_OCP_H_
 #define SOURCE_OCP_H_
 
-#include"../utilities/utils.h"
+#include"utils.h"
 
 class OCP
 {
 public:
-	virtual void BindPeripheral(t_OCP ocp) = 0;
+	virtual void BindPeripheral(OCP_t ocp) = 0;
 	virtual void Initialize() = 0;
 }; //end class OCP
 

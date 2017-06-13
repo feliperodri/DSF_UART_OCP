@@ -1,27 +1,19 @@
-#include"dsf_UART_OCP.h"
+#include"../Includes/dsf_UART_OCP.h"
 #include<assert.h>
 
 dsf_UART_OCP uart;
 
-/*
-extern "C" {
-	void UART0_IRQHandler(){
-		//handle interruption
-	}
-}
- */
-
 void setup(){
 	uart.BindPeripheral(dsf_UART3);
 	uart.BindChannel(dsf_PORTB);
-	//uart.SetFrame(8,dsf_None,dsf_One);
+	uart.SetFrame(8,dsf_Even,dsf_One);
 	uart.SetBaudRate(9600);
 	uart.Initialize();
 }
 
-void main(){
+int main(){
 	uint8_t data;
-	uint8_t receptor;
+	uint8_t receptor = 0;
 	data = 'F';
 
 	setup();
@@ -42,9 +34,10 @@ void main(){
 		uart.ReceiveData(&receptor);
 
 		// Check if transfer was successful
-		assert(receptor == 'F');
+		//assert(receptor != 'F');
 
 		if(receptor == 'F')
 			GPIOE_PCOR |= 1<<26;
 	}
+	return 0;
 } //EOF

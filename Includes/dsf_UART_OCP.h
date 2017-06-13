@@ -15,14 +15,13 @@ class dsf_UART_OCP : public OCP
 {
 public:
 	dsf_UART_OCP();
-	~dsf_UART_OCP();
 	void BindPeripheral(OCP_t ocp) override;
 	void Initialize() override;
 	void BindChannel(Port_t port);
-	void SetFrame(uint8_t LenData, Parity_t parity, Stop_t stop);
+	void SetFrame(uint8_t lengthData, Parity_t parity, Stop_t stop);
 	void SetBaudRate(uint32_t rate);
 	void SendData(uint8_t data);
-	uint8_t ReceiveData();
+	void ReceiveData(uint8_t *data);
 	void ClearPeripheral();
 	void CancelSend();
 	void ResetPeripheral();
@@ -34,8 +33,11 @@ public:
 private:
 	OCP_t ocp;
 	Port_t port;
+	uint8_t lengthData;
+	Parity_t parity;
+	Stop_t stop;
 	uint16_t baudRateModuloDivisor;
-	uint32_t boudRate;
+	uint32_t boudRate; //o a
 }; // end class dsf_UART_OCP
 
 #endif /* SOURCE_DSF_UART_OCP_H_ */

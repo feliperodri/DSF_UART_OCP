@@ -65,20 +65,57 @@ void dsf_UART_OCP::Initialize()
 			PORTB_PCR17 |= PORT_PCR_MUX(3); /*Select alternative 3 for TX*/
 		}
 
+		/*Set frame configuration for register 1 */
+		UART3_C1 = 0;
+		if(lengthData == 8) // 8-bit
+		{
+			UART3_C1 &= ~UART_C1_M_MASK;
+		}
+		else // 9-bit
+		{
+			UART3_C1 |= UART_C1_M_MASK;
+		}
+
+		if(parity == dsf_Even)
+		{
+			//UART3_C1 |= UART_C1_PE_MASK;
+			//UART3_C1 |= UART_C1_ILT_MASK;
+			UART3_C1 &= ~UART_C1_PT_MASK;
+		}
+		else // dsf_Odd
+		{
+			//UART3_C1 |= UART_C1_PE_MASK;
+			//UART3_C1 |= UART_C1_ILT_MASK;
+			UART3_C1 |= UART_C1_PT_MASK;
+		}
+
 		UART3_C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK ); /*Unable RX and TX for register 2*/
-		UART3_C1 = 0; /*Set default configuration for register 1 */
 
 		this->baudRateModuloDivisor = (uint16_t)((21000*1000)/(this->boudRate * 16)); /* Calculate baud settings */
 		UART3_BDH = (UART3_BDH & ~(UART_BDH_SBR(0x1F))) | (((this->baudRateModuloDivisor & 0x1F00) >> 8));
 		UART3_BDL = (uint8_t)(this->baudRateModuloDivisor & UART_BDL_SBR_MASK);
 
 		UART3_C2 |= (UART_C2_TE_MASK |UART_C2_RE_MASK); /* Enable receiver and transmitter*/
+
+		/*SETFRAME FROM HERE*/
+
+
+
 	}
 } // end function Initialize
 
-void dsf_UART_OCP::SetFrame(uint8_t LenData, Parity_t parity, Stop_t stop)
+void dsf_UART_OCP::SetFrame(uint8_t lengthData, Parity_t parity, Stop_t stop)
 {
-	//TODO
+	if(lengthData == 8 || lengthData == 9)
+	{
+		this->lengthData = lengthData;
+		this->parity = parity;
+		this->stop = stop;
+	}
+	else
+	{
+		//ERROR MESSAGE
+	}
 } // end function SetFrame
 
 void dsf_UART_OCP::SetBaudRate(uint32_t rate)
@@ -107,7 +144,21 @@ void dsf_UART_OCP::ClearPeripheral()
 
 void dsf_UART_OCP::CancelSend()
 {
+	if(this->ocp == dsf_UART1)
+	{
+		UART1_C2 |= UART_C2_SBK_MASK;
 
+	}
+	else if (this->ocp == dsf_UART2)
+	{
+		UART2_C2 |= UART_C2_SBK_MASK;
+
+	}
+	else
+	{
+		UART3_C2 |= UART_C2_SBK_MASK;
+
+	}
 } // end function CancelSend
 
 void dsf_UART_OCP::ResetPeripheral()
@@ -121,6 +172,7 @@ void dsf_UART_OCP::WaitComm(Comm_t comm)
 	{
 		if(this->ocp == dsf_UART3)
 		{
+			UART3_C2 &= ~UART_C2_SBK_MASK;
 			while(!(UART3_S1 & UART_S1_TDRE_MASK));
 		}
 	}

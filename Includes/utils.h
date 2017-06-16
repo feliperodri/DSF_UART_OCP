@@ -27,13 +27,15 @@ typedef enum {dsf_Div1, dsf_Div2, dsf_Div4, dsf_Div8, dsf_Div16, dsf_Div32,
 
 typedef enum {dsf_Tx, dsf_Rx} Comm_t;
 
-typedef enum {dsf_One, dsf_Onehalf, dsf_Two } Stop_t;
+typedef enum {dsf_7bit=7, dsf_8bit, dsf_9bit } LenghtData_t;
 
-typedef enum {dsf_Odd, dsf_Even } Parity_t;
+typedef enum { dsf_OddParity, dsf_EvenParity, dsf_NoneParity} Parity_t;
+
+typedef enum { dsf_One, dsf_Two} Stop_t;
 
 typedef enum {dsf_PullUp, dsf_PullDown, dsf_PullNone } PullResistor_t;
 
-typedef enum {ok=0, dsf_OverWrite, dsf_ParityError} Exception_t;
+typedef enum {dsf_Ok, dsf_ParityError=-1} Exception_t;
 
 typedef enum {dsf_PORTA, dsf_PORTB, dsf_PORTC} Port_t;
 
